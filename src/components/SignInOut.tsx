@@ -21,7 +21,7 @@ const SignInOut = () => {
     setValue(newValue);
   };
 
-  const paperStyle = { width: 340, margin: "20px auto" };
+  const paperStyle = { width: 340, margin: "20px auto", display:'flex', alignItems:'bottom' };
 
   function TabPanel(props: TabPanelProps) {
     const { children, value, index, ...other } = props;

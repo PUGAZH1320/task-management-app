@@ -1,35 +1,22 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-const initialState = {
-  name: '',
-  email: '',
-  password: '',
-  error: null,
-  isSubmitting: false
+interface submitState {
+  isSubmitting: string
+}
+const initialState:submitState = {
+  isSubmitting: ""
 };
 
 const formSlice = createSlice({
   name: 'form',
   initialState,
   reducers: {
-    updateName: (state, action) => {
-      state.name = action.payload;
-    },
-    updateEmail: (state, action) => {
-      state.email = action.payload;
-    },
-    updatePassword: (state, action) => {
-      state.password = action.payload;
-    },
-    setError: (state, action) => {
-      state.error = action.payload;
-    },
-    setIsSubmitting: (state, action) => {
+    setIsSubmitting: (state, action: PayloadAction<string>) => {
       state.isSubmitting = action.payload;
-    }
+    },
   }
 });
 
-export const { updateName, updateEmail, updatePassword, setError, setIsSubmitting } = formSlice.actions;
+export const {setIsSubmitting } = formSlice.actions;
 
 export default formSlice.reducer;

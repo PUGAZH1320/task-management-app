@@ -1,6 +1,7 @@
 import React from "react";
-
-import {useState } from 'react';
+import { useDispatch } from "react-redux";
+import { updateName,updateEmail,updatePassword,updatePassword2 } from "../slice/userSlice";
+import { useSelector } from 'react-redux'
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Avatar from "@mui/material/Avatar";
@@ -9,58 +10,43 @@ import Button from "@mui/material/Button";
 import { ReactComponent as ReactLogo } from "../../src/assets/logo.svg";
 import { Link, Typography } from "@mui/material";
 import axios from 'axios';
+import { useState } from "react";
 
 
 
-const SignUp = ({handleChange}:{handleChange:any},{setAlert}:{setAlert:any}) => {
 
-    const [formData, setFormData]=useState({
-        name:'',
-        email:'',
-        password:'',
-        password2:''
-    });
-
-    const {name,email,password,password2} = formData;
-
-    const onChange = (e:any) => {
-        setFormData({...formData, [e.target.name]:e.target.value})
-    }
-    const onSubmit =async (e:any) => {
-        e.preventDefault()
-        if(password!== password2) {
-            setAlert("password not matched",'danger')
-        }else{
-           const newUser ={
-            name,
-            email,
-            password
-           }
-
-           try{
-            const config ={
-                headers:{
-                    'Content-Type':'application/json'
-                }
-            }
-
-            const body = JSON.stringify(newUser);
-            const res = await axios.post('http://localhost:5000/api/users',body,config);
-            console.log(res.data);
-            setFormData({
-                name:'',
-                email:'',
-                password:'',
-                password2:''
-            })
-           }catch(err){
-            
-           }
-        }
-        
+const SignUp = ({handleChange}:{handleChange:any}) => {
+  const dispatch = useDispatch()
+  const data = useSelector((state: any) => state.user);
+  const [form, setForm] = useState<any>(data);
+    const handleChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
+      dispatch(updateName(e.target.value));
     };
 
+    const handleChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+      dispatch(updateEmail(e.target.value));
+    };
+
+    const handleChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+      dispatch(updatePassword(e.target.value));
+    };
+    const handleChangePassword2 = (e: React.ChangeEvent<HTMLInputElement>) => {
+      dispatch(updatePassword2(e.target.value));
+    };
+    const handleSubmit =  (e:any) => {
+      e.preventDefault();
     
+    axios.post('/api/users', data)
+        .then((response) => {
+            console.log(response);
+            console.log(form);
+            setForm({})
+
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+    };
 
   const paperStyle = {
     padding: 20,
@@ -92,9 +78,8 @@ const SignUp = ({handleChange}:{handleChange:any},{setAlert}:{setAlert:any}) => 
               label="Name"
               placeholder="Enter your Name"
               variant="outlined"
-              value={name}
               name='name'
-              onChange={e => onChange(e)}
+              onChange={handleChangeName}
               fullWidth
               required
               sx={{ m: "5px" }}
@@ -103,9 +88,8 @@ const SignUp = ({handleChange}:{handleChange:any},{setAlert}:{setAlert:any}) => 
               label="E-mail"
               placeholder="Enter Email"
               type="email"
-              value={email}
               name='email'
-              onChange={e => onChange(e)}
+              onChange={handleChangeEmail}
               variant="outlined"
               fullWidth
               required
@@ -115,9 +99,8 @@ const SignUp = ({handleChange}:{handleChange:any},{setAlert}:{setAlert:any}) => 
               label="Password"
               placeholder="Enter Password"
               type="Password"
-              value={password}
               name='password'
-              onChange={e => onChange(e)}
+              onChange={handleChangePassword}
               variant="outlined"
               fullWidth
               required
@@ -127,9 +110,8 @@ const SignUp = ({handleChange}:{handleChange:any},{setAlert}:{setAlert:any}) => 
               label="Confirm Password"
               placeholder="Re-Enter Password"
               type="Password"
-              value={password2}
               name='password2'
-              onChange={e => onChange(e)}
+              onChange={handleChangePassword2}
               variant="outlined"
               fullWidth
               required
@@ -139,7 +121,7 @@ const SignUp = ({handleChange}:{handleChange:any},{setAlert}:{setAlert:any}) => 
               type="submit"
               variant="contained"
               color="primary"
-              onClick={onSubmit}
+              onClick={handleSubmit}
               sx={{ m: "20px" }}
             >
               Sign Up
