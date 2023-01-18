@@ -11,12 +11,18 @@ import { ReactComponent as ReactLogo } from "../../src/assets/logo.svg";
 import { Link, Typography } from "@mui/material";
 import axios from 'axios';
 import { useState } from "react";
+import {useNavigate} from 'react-router-dom';
 
 
 
 
-const SignUp = ({handleChange}:{handleChange:any}) => {
+const SignUp = () => {
+  let navigate = useNavigate();
   const dispatch = useDispatch()
+  const handleClick =(e:any) => {
+    navigate('/')
+};
+
   const data = useSelector((state: any) => state.user);
   const [form, setForm] = useState<any>(data);
     const handleChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -127,7 +133,7 @@ const SignUp = ({handleChange}:{handleChange:any}) => {
               Sign Up
             </Button>
             <Typography>Already have an account?
-                <Link onClick={()=> handleChange('event',0)}>Sign In
+                <Link onClick={handleClick}>Sign In
                 </Link>
             </Typography>
           </Grid>

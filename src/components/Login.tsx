@@ -7,11 +7,12 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { ReactComponent as ReactLogo } from "../../src/assets/logo.svg";
 import { Link, Typography } from "@mui/material";
+import {useNavigate} from 'react-router-dom';
 
 
 
-const Login = ({handleChange}:{handleChange:any}) => {
-
+const Login = () => {
+  let navigate = useNavigate();
     const [userData, setUserData]=useState({
         email:'',
         password:''
@@ -23,8 +24,11 @@ const Login = ({handleChange}:{handleChange:any}) => {
     const onChange = (e:any) => {
         setUserData({...userData, [e.target.name]:e.target.value})
     }
-    const onSubmit =async (e:any) => {
+    const onSubmit =(e:any) => {
         
+    };
+    const handleClick =(e:any) => {
+        navigate('/signup')
     };
 
   const paperStyle = {
@@ -90,7 +94,7 @@ const Login = ({handleChange}:{handleChange:any}) => {
                 </Link>
             </Typography>
             <Typography>Do you have an account?
-                <Link onClick={()=> handleChange('event',1)}>Sign Up
+                <Link onClick={handleClick}>Sign Up
                 </Link>
             </Typography>
           </Grid>
