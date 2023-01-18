@@ -8,10 +8,14 @@ import Button from "@mui/material/Button";
 import { ReactComponent as ReactLogo } from "../../src/assets/logo.svg";
 import { Link, Typography } from "@mui/material";
 import {useNavigate} from 'react-router-dom';
+import { connect } from "react-redux";
+import PropTypes from 'prop-types'
+import { login } from "../actions/auth";
 
 
 
-const Login = () => {
+
+const Login = ({login, isAuthenticated}:any) => {
   let navigate = useNavigate();
     const [userData, setUserData]=useState({
         email:'',
@@ -19,12 +23,17 @@ const Login = () => {
         
     });
 
-    // const {email,password} = userData;
+    const {email,password} = userData;
 
     const onChange = (e:any) => {
         setUserData({...userData, [e.target.name]:e.target.value})
     }
     const onSubmit =(e:any) => {
+      e.preventDefault();
+      login(email, password)
+      if (isAuthenticated) {
+        return navigate('/dashboard')
+      }
         
     };
     const handleClick =(e:any) => {
@@ -37,8 +46,14 @@ const Login = () => {
     width: 300,
     margin: "0px auto",
   };
+
+  if(isAuthenticated) {
+    navigate('/dashboard')
+ }
+
   return (
     <>
+    
       <Grid>
         <Paper  style={paperStyle}>
           <Grid
@@ -83,7 +98,7 @@ const Login = () => {
               type="submit"
               variant="contained"
               color="primary"
-              onClick={onSubmit}
+              onClick={e => onSubmit(e)}
               fullWidth
               sx={{ m: "20px" }}
             >
@@ -104,4 +119,13 @@ const Login = () => {
   );
 };
 
-export default Login;
+Login.propTypes = {
+  login: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool
+}
+
+const mapStateToProps =  (state:any) => ({
+isAuthenticated: state.auth.isAuthenticated
+})
+
+export default connect(mapStateToProps,{login})(Login);

@@ -1,5 +1,5 @@
-import { Container } from "react-bootstrap";
-import React, { useMemo } from "react";
+import { Container, } from "react-bootstrap";
+import React, { useMemo,useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "./Login";
 import NewTask from "./NewTask";
@@ -10,6 +10,10 @@ import TaskList from "./TaskList";
 import NoteLayout from "./NoteLayout";
 import OneNote from "./OneNote";
 import EditTask from "./EditTask";
+import Alert from "../layouts/Alert";
+import { loadUser } from "../actions/auth";
+import setAuthToken from "../utils/setAuthToken";
+import store from "../store";
 
 export type Note = {
   id: string;
@@ -35,7 +39,15 @@ export type Tag = {
   label: string;
 };
 
+if(localStorage.token){
+  setAuthToken(localStorage.token);
+}
+
 const Dash = () => {
+
+  useEffect(()=> {
+    store.dispatch<any>(loadUser());
+  },[])
   const [notes, setNotes] = useLocalStorage<RawNote[]>("NOTES", []);
   const [tags, setTags] = useLocalStorage<Tag[]>("TAGS", []);
 
@@ -101,8 +113,11 @@ const Dash = () => {
 
   return (
     <>
+     <Alert/>
       <Container className="my-4">
+     
         <Routes>
+          
           <Route
             path="/dashboard"
             element={<TaskList notes={notesWithTags} availableTags={tags} onUpdateTag={updateTag} onDeleteTag={deleteTag} />}

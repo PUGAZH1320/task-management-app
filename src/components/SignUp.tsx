@@ -1,7 +1,4 @@
 import React from "react";
-import { useDispatch } from "react-redux";
-import { updateName,updateEmail,updatePassword,updatePassword2 } from "../slice/userSlice";
-import { useSelector } from 'react-redux'
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Avatar from "@mui/material/Avatar";
@@ -9,50 +6,48 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { ReactComponent as ReactLogo } from "../../src/assets/logo.svg";
 import { Link, Typography } from "@mui/material";
-import axios from 'axios';
 import { useState } from "react";
 import {useNavigate} from 'react-router-dom';
+import { connect } from "react-redux";
+import { setAlert } from "../actions/alert";
+import { register } from "../actions/auth";
+import PropTypes from 'prop-types'
 
 
 
 
-const SignUp = () => {
+const SignUp = ({setAlert,register,isAuthenticated}:any) => {
   let navigate = useNavigate();
-  const dispatch = useDispatch()
   const handleClick =(e:any) => {
     navigate('/')
 };
 
-  const data = useSelector((state: any) => state.user);
-  const [form, setForm] = useState<any>(data);
-    const handleChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
-      dispatch(updateName(e.target.value));
-    };
+  const [formData, setFormData] = useState<any>({
+    name:'',
+    email:'',
+    password:'',
+    password2:''
+  });
 
-    const handleChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
-      dispatch(updateEmail(e.target.value));
-    };
-
-    const handleChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-      dispatch(updatePassword(e.target.value));
-    };
-    const handleChangePassword2 = (e: React.ChangeEvent<HTMLInputElement>) => {
-      dispatch(updatePassword2(e.target.value));
-    };
+  const {name,email,password, password2} = formData;
+  const onChange = (e:any) => {
+    setFormData({...formData, [e.target.name]:e.target.value})
+  }
     const handleSubmit =  (e:any) => {
       e.preventDefault();
-    
-    axios.post('/api/users', data)
-        .then((response) => {
-            console.log(response);
-            console.log(form);
-            setForm({})
 
-        })
-        .catch((error) => {
-            console.error(error);
-        });
+      if (password!== password2) {
+        setAlert('Passwords do not match','danger')
+        console.log(formData)
+      }
+      else{
+        register({name, email, password})
+        console.log('SUCCESS')
     };
+    
+      }
+    
+    
 
   const paperStyle = {
     padding: 20,
@@ -60,6 +55,11 @@ const SignUp = () => {
     width: 300,
     margin: "0px auto",
   };
+
+  if(isAuthenticated) {
+    navigate('/dashboard')
+ }
+
   return (
     <>
       <Grid>
@@ -85,7 +85,8 @@ const SignUp = () => {
               placeholder="Enter your Name"
               variant="outlined"
               name='name'
-              onChange={handleChangeName}
+              value={name}
+              onChange={e => onChange(e)}
               fullWidth
               required
               sx={{ m: "5px" }}
@@ -95,7 +96,8 @@ const SignUp = () => {
               placeholder="Enter Email"
               type="email"
               name='email'
-              onChange={handleChangeEmail}
+              value={email}
+              onChange={e => onChange(e)}
               variant="outlined"
               fullWidth
               required
@@ -106,7 +108,8 @@ const SignUp = () => {
               placeholder="Enter Password"
               type="Password"
               name='password'
-              onChange={handleChangePassword}
+              value={password}
+              onChange={e => onChange(e)}
               variant="outlined"
               fullWidth
               required
@@ -117,7 +120,8 @@ const SignUp = () => {
               placeholder="Re-Enter Password"
               type="Password"
               name='password2'
-              onChange={handleChangePassword2}
+              value={password2}
+              onChange={e => onChange(e)}
               variant="outlined"
               fullWidth
               required
@@ -143,4 +147,14 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+SignUp.propTypes = {
+  setAlert: PropTypes.func.isRequired,
+  register: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool
+}
+
+const mapStateToProps =  (state:any) => ({
+  isAuthenticated: state.auth.isAuthenticated
+  })
+
+export default connect(mapStateToProps,{setAlert, register})(SignUp);
