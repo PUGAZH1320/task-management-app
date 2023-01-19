@@ -105,3 +105,7 @@ export const login = (email:string, password:string) => async (dispatch: Dispatc
     }
   };
   
+
+  export const logout = () =>  (dispatch:Dispatch) => {
+    dispatch({ type:LOGOUT})
+  }

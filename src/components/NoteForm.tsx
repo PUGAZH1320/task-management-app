@@ -34,7 +34,7 @@ const NoteForm = ({ onSubmit,onAddTag,availableTags, title="",markdown="",tags=[
           <Row>
             <Col>
               <Form.Group controlId="title">
-                <Form.Label>Project Name</Form.Label>
+                <Form.Label>Task Name</Form.Label>
                 <Form.Control ref={titleRef} required defaultValue={title}/>
               </Form.Group>
             </Col>

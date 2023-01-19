@@ -9,10 +9,11 @@ import {
   Badge,
   Modal,
 } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ReactSelect from "react-select";
 import { Tag } from "./Dash";
 import styles from "../NotesList.module.css";
+import Dashboard from "./Dashboard";
 
 type SimplifiedNote = {
   tags: Tag[];
@@ -44,6 +45,7 @@ const TaskList = ({
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [title, setTitle] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate()
   const filteredNotes = useMemo(() => {
     return notes.filter((note) => {
       return (
@@ -59,6 +61,7 @@ const TaskList = ({
 
   return (
     <>
+    <Dashboard/>
       <Row className="align-items-center mb-4">
         <Col>
           <h1>Tasks</h1>
@@ -70,6 +73,9 @@ const TaskList = ({
             </Link>
             <Button onClick={() => console.log(...notes)} variant="outline-success">
               Save All
+            </Button>
+            <Button onClick={() => navigate('..')} variant="outline-danger">
+              LOGOUT
             </Button>
             <Button onClick={() => setIsOpen(true)} variant="outline-secondary">
               Edit Tags
@@ -130,7 +136,8 @@ const TaskList = ({
   );
 };
 
-export default TaskList;
+
+export default (TaskList);
 
 function NoteCard({ id, title, tags }: SimplifiedNote) {
   return (

@@ -14,6 +14,7 @@ import Alert from "../layouts/Alert";
 import { loadUser } from "../actions/auth";
 import setAuthToken from "../utils/setAuthToken";
 import store from "../store";
+import Dashboard from "./Dashboard";
 
 export type Note = {
   id: string;
@@ -113,13 +114,14 @@ const Dash = () => {
 
   return (
     <>
+    
      <Alert/>
       <Container className="my-4">
      
         <Routes>
           
           <Route
-            path="/dashboard"
+            path="/dash"
             element={<TaskList notes={notesWithTags} availableTags={tags} onUpdateTag={updateTag} onDeleteTag={deleteTag} />}
           />
           <Route
@@ -133,6 +135,7 @@ const Dash = () => {
             }
           />
           <Route path="/" element={<Login />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/:id" element={<NoteLayout notes={notesWithTags} />}>
             <Route index element={<OneNote onDelete={onDelete}/>} />
