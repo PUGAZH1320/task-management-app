@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import {connect } from 'react-redux';
-import {getAllProfile} from '../actions/profile';
+import {getAllUserProfile} from '../actions/profile';
 import Logout from './Logout';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -12,10 +12,11 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Button} from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom';
+import { deleteTask } from '../actions/profile';
 
-const Dashboard = ({getAllProfile, auth, profile}:any) => {
+const AdminDashboard = ({getAllUserProfile, adminauth,deleteTask, profile}:any) => {
     useEffect(()=> {
-        getAllProfile();
+        getAllUserProfile();
         // eslint-disable-next-line
     },[])
     const data = (profile.profile)
@@ -27,22 +28,21 @@ const Dashboard = ({getAllProfile, auth, profile}:any) => {
     // console.log(user)
     const name = user?.map((task:any) => (
       task.name
-
-    ))
+      ))
     console.log(name)
-  //  console.log(name)
+
     const navigate = useNavigate()
 
     
 
 
-    // data && data.map((task:any) => (
-    //   <div>title:{task.title} Remark:{task.markdown} Tags:{task.tagIds[0]}</div>
-    // ))
+    data && data.map((task:any) => (
+      <div>title:{task.title} Remark:{task.markdown} Tags:{task.tagIds[0]}</div>
+    ))
   return (
     <>
     
-    <h3>Your Task details</h3>
+    <h3>All Task details</h3>
     <Button onClick={()=> navigate('/create-task')} variant="outline-primary">
               Create
           </Button>
@@ -54,6 +54,9 @@ const Dashboard = ({getAllProfile, auth, profile}:any) => {
             <TableCell align="right">Remarks</TableCell>
             <TableCell align="right">Tags</TableCell>
             <TableCell align="right">Edit</TableCell>
+            <TableCell align="right">
+              Name
+            </TableCell>
             <TableCell align="right">Delete</TableCell>
           </TableRow>
         </TableHead>
@@ -69,13 +72,14 @@ const Dashboard = ({getAllProfile, auth, profile}:any) => {
               </TableCell>
               <TableCell align="right">{task.markdown}</TableCell>
               <TableCell align="right">{task.tagIds.join()}</TableCell>
+              <TableCell align="right">{name}</TableCell>
               <TableCell align="right">
               <Button onClick={()=> navigate('/edit-task')} variant="outline-secondary">
               EDIT
           </Button>
               </TableCell>
               <TableCell align="right">
-              <Button onClick={()=> navigate('/create-task')} variant="outline-danger">
+              <Button onClick={()=>deleteTask()} variant="outline-danger">
               Delete
           </Button>
               </TableCell>
@@ -91,15 +95,16 @@ const Dashboard = ({getAllProfile, auth, profile}:any) => {
   )
 }
 
-Dashboard.propTypes ={
-    getAllProfile: PropTypes.func.isRequired,
-    auth: PropTypes.object.isRequired,
+AdminDashboard.propTypes ={
+    getAllUserProfile: PropTypes.func.isRequired,
+    deleteTask: PropTypes.func.isRequired,
+    adminauth: PropTypes.object.isRequired,
     profile: PropTypes.object.isRequired,
 }
 
 const mapStateToProps = (state:any) => ({
-    auth: state.auth,
+    adminauth: state.auth,
     profile:state.profile
 })
 
-export default connect(mapStateToProps,{getAllProfile})(Dashboard)
+export default connect(mapStateToProps,{getAllUserProfile,deleteTask})(AdminDashboard)

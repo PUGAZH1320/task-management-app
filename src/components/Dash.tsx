@@ -15,6 +15,10 @@ import { loadUser } from "../actions/auth";
 import setAuthToken from "../utils/setAuthToken";
 import store from "../store";
 import Dashboard from "./Dashboard";
+import AdminDashboard from "./AdminDashboard";
+import CreateTask from "./CreateTask";
+import EditProfile from "./EditProfile";
+import AdminLogin from "./AdminLogin";
 
 export type Note = {
   id: string;
@@ -135,7 +139,11 @@ const Dash = () => {
             }
           />
           <Route path="/" element={<Login />} />
+          <Route path="/admin" element={<AdminLogin />} />
+          <Route path="/create-task" element={<CreateTask />} />
+          <Route path="/edit-task" element={<EditProfile />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/admindashboard" element={<AdminDashboard />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/:id" element={<NoteLayout notes={notesWithTags} />}>
             <Route index element={<OneNote onDelete={onDelete}/>} />

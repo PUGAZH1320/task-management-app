@@ -6,16 +6,16 @@ import Avatar from "@mui/material/Avatar";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { ReactComponent as ReactLogo } from "../../src/assets/logo.svg";
-import { Link, Typography } from "@mui/material";
 import {useNavigate} from 'react-router-dom';
 import { connect } from "react-redux";
 import PropTypes from 'prop-types'
-import { login } from "../actions/auth";
+import { adminlogin } from "../actions/auth";
 
 
 
 
-const Login = ({login, isAuthenticated}:any) => {
+
+const AdminLogin = ({adminlogin, isAuthenticated}:any) => {
   let navigate = useNavigate();
     const [userData, setUserData]=useState({
         email:'',
@@ -30,14 +30,11 @@ const Login = ({login, isAuthenticated}:any) => {
     }
     const onSubmit =(e:any) => {
       e.preventDefault();
-      login(email, password)
+      adminlogin(email, password)
       if (isAuthenticated) {
-        return navigate('/dashboard')
+        return navigate('/admindashboard')
       }
         
-    };
-    const handleClick =(e:any) => {
-        navigate('/signup')
     };
 
   const paperStyle = {
@@ -48,7 +45,7 @@ const Login = ({login, isAuthenticated}:any) => {
   };
 
   if(isAuthenticated) {
-    navigate('/dashboard')
+    navigate('/admindashboard')
  }
 
   return (
@@ -70,7 +67,7 @@ const Login = ({login, isAuthenticated}:any) => {
             >
               <ReactLogo />
             </Avatar>
-            <h1>Sign In</h1>
+            <h1>Admin Login</h1>
 
             <TextField
               label="E-mail"
@@ -104,24 +101,6 @@ const Login = ({login, isAuthenticated}:any) => {
             >
               Sign In
             </Button>
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              onClick={()=> navigate('/admin')}
-              fullWidth
-              sx={{ m: "20px" }}
-            >
-              Admin Login
-            </Button>
-            <Typography>
-                <Link>Forget Password?
-                </Link>
-            </Typography>
-            <Typography>Do you have an account?
-                <Link onClick={handleClick}>Sign Up
-                </Link>
-            </Typography>
           </Grid>
         </Paper>
       </Grid>
@@ -129,8 +108,8 @@ const Login = ({login, isAuthenticated}:any) => {
   );
 };
 
-Login.propTypes = {
-  login: PropTypes.func.isRequired,
+AdminLogin.propTypes = {
+  adminlogin: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool
 }
 
@@ -138,4 +117,4 @@ const mapStateToProps =  (state:any) => ({
 isAuthenticated: state.auth.isAuthenticated
 })
 
-export default connect(mapStateToProps,{login})(Login);
+export default connect(mapStateToProps,{adminlogin})(AdminLogin);

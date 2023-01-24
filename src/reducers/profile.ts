@@ -1,4 +1,4 @@
-import { GET_PROFILE, PROFILE_ERROR } from './../actions/types';
+import { GET_PROFILE, PROFILE_ERROR, DELETE_TASK } from './../actions/types';
 
 interface InitialState {
 profile: any | null;
@@ -35,6 +35,12 @@ switch (type) {
         return{
             ...state,
             error: payload,
+            loading:false
+        }
+    case DELETE_TASK:
+        return {
+            ...state,
+            profile: state.profile.filter((profile:any) => profile._id !== payload),
             loading:false
         }
     default:

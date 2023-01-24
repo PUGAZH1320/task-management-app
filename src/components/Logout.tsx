@@ -16,7 +16,8 @@ const Logout = ({auth: {isAuthenticated, loading}, logout}:any) => {
         
         <Button onClick={logout} variant="outline-danger">
               LOGOUT
-            </Button>
+          </Button>
+        
       
     </div>
 

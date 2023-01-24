@@ -9,3 +9,5 @@ export const AUTH_ERROR= 'AUTH_ERROR';
 export const LOGOUT= 'LOGOUT';
 export const GET_PROFILE= 'GET_PROFILE';
 export const PROFILE_ERROR= 'PROFILE_ERROR';
+export const DELETE_TASK= 'DELETE_TASK';
+export const DELETE_ERROR= 'DELETE_ERROR';
